@@ -144,7 +144,7 @@ void Monta_assembly(char *nome_do_arquivo){
     int passou_do_stop = 0; 
 
 
-    while(k<linhas_no_arquivo){
+    while(!feof(file_pre)){
 
         sprintf(end_em_string, "%d", acumulador_do_endereco);
         //strcpy(codigo_obj[k][0], end_em_string); 
@@ -347,7 +347,7 @@ void Monta_assembly(char *nome_do_arquivo){
 
     k = 0; 
 
-    while(k<linhas_no_arquivo){
+    while(!feof(file_pre)){
 
         //sprintf(end_em_string, "%d", acumulador_do_endereco);
         //printf("%s\n\n", end_em_string); 

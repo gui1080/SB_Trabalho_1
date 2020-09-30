@@ -115,6 +115,8 @@ void Pre_p(char *nome_do_arquivo) {
     pula_linha = 0;
     pula_prox_linha = 0;
 
+    int prox_linha = 1; 
+
     // -----------------------------
     // Loop da leitura de tokens
 
@@ -122,6 +124,10 @@ void Pre_p(char *nome_do_arquivo) {
 
         conta_linhas++; 
 
+        if(prox_linha == 0){
+            fprintf(file_teste, "\n");
+            prox_linha = 1; 
+        }
         if(pula_prox_linha == 1){
             pula_linha = 1;
             pula_prox_linha = 0;
@@ -363,18 +369,17 @@ void Pre_p(char *nome_do_arquivo) {
     
         if(pula_linha == 0){
             switch(i){
-                case 1 : fprintf(file_teste, "%s\n", termo1); break;
-                case 2 : fprintf(file_teste, "%s %s\n", termo1, termo2); break;
-                case 3 : fprintf(file_teste, "%s %s %s\n", termo1, termo2, termo3); break;
-                case 4 : fprintf(file_teste, "%s %s %s %s\n", termo1, termo2, termo3, termo4); break;
+                case 1 : fprintf(file_teste, "%s", termo1); break;
+                case 2 : fprintf(file_teste, "%s %s", termo1, termo2); break;
+                case 3 : fprintf(file_teste, "%s %s %s", termo1, termo2, termo3); break;
+                case 4 : fprintf(file_teste, "%s %s %s %s", termo1, termo2, termo3, termo4); break;
                     
             }
+            prox_linha = 0;
         }
         if(pula_linha == 1){
             pula_linha = 0; 
         }
-    
-    
     
     }
 
