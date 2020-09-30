@@ -1,0 +1,20 @@
+Guilherme Braga - 17/0162290
+
+Nesta pasta se encontram alguns testes feitos ao longo do desenvolvimento.
+
+> Testes para serem feitos no pré-processamento
+
+bin1.asm: neste arquivo um IF se refere a um termo indefinido, gerando um erro
+bin2.asm: neste arquivo ocorre um EQU após o SECTION TEXT, o que gera um erro
+bin3.asm: neste arquivo tentamos redefinir o A2 logo após sua definição, o que resulta em um erro.
+
+> Testes para serem feitos na montagem
+
+bin1.pre: neste arquivo um JMPP não é acompanhado de label, resultando em um erro.
+bin2.pre: neste arquivo se declara uma variável NEW_TMP_DATA antes de SECTION DATA, resultando em um erro.
+bin3.pre: neste arquivo deleta-se a label L1, então quando ocorre uma referência a ela o programa aponta um erro.
+bin4.pre: neste arquivo deleta-se o SECTION DATA e o programa aponta erro.
+bin5.pre: neste arquivo escreve-se "STORE" errado, gerando um erro.
+bin6.pre: neste arquivo o COPY recebe 1 argumento a menos, gerando um erro.
+bin7.pre: neste arquivo tenta-se criar 2 labels na mesma linha, gerando um erro.
+bin8.pre: neste arquivo não há um STOP, gerando um erro. 
