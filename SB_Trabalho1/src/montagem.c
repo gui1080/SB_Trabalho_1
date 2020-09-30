@@ -55,13 +55,17 @@ void Monta_assembly(char *nome_do_arquivo){
 
     strcpy(nome_do_arquivo_obj, nome_do_arquivo);
     strcpy(nome_do_arquivo_pre, nome_do_arquivo);
-    
+
+    //nome_do_arquivo_pre[tamanho_do_nome_do_arquivo-1] = 'e';
+    //nome_do_arquivo_pre[tamanho_do_nome_do_arquivo-2] = 'r';
+    //nome_do_arquivo_pre[tamanho_do_nome_do_arquivo-3] = 'p';
+
     if( (nome_do_arquivo_pre[tamanho_do_nome_do_arquivo-1] != 'e') ||
         (nome_do_arquivo_pre[tamanho_do_nome_do_arquivo-2] != 'r') ||
         (nome_do_arquivo_pre[tamanho_do_nome_do_arquivo-3] != 'p')
     ){
         // o nome passado está incorreto
-        printf("O arquivo passado está em um formato incorreto!\n"); 
+        printf("O formato do arquivo passado está incorreto!"); 
         exit(0); 
     }
 
@@ -74,15 +78,13 @@ void Monta_assembly(char *nome_do_arquivo){
 
 
     file_pre = fopen(nome_do_arquivo_pre, "r");
-    printf("%s\n\n", nome_do_arquivo_pre); 
 
     if(file_pre == NULL){
         printf("\nErro na abertura do arquivo .pre\n"); 
+        exit(0); 
     }
 
     linhas_no_arquivo = counter(file_pre); 
-    printf("\nLinhas no arquivo: %d\n", linhas_no_arquivo); 
-
     fclose(file_pre);
 
     //char teste[] = "loadd";
@@ -91,8 +93,6 @@ void Monta_assembly(char *nome_do_arquivo){
     //kk = define_op_code(teste);
     //printf("%d", kk); 
 
-    //printf("so far, so good."); 
-    
 
     // Primeira passagem
     //------------------------------------------------------------------------------------------
@@ -147,7 +147,6 @@ void Monta_assembly(char *nome_do_arquivo){
     while(k<linhas_no_arquivo){
 
         sprintf(end_em_string, "%d", acumulador_do_endereco);
-        printf("%s\n\n", end_em_string); 
         //strcpy(codigo_obj[k][0], end_em_string); 
         //codigo_obj[k][0] = endereço daquela linha
         //printf("%s\n\n", codigo_obj[k][0]);
@@ -161,7 +160,6 @@ void Monta_assembly(char *nome_do_arquivo){
         i = 1; 
 
         do{
-            printf("%s \n\n\n", tokens);
             
             //if(tokens != NULL){
                 switch(i){
@@ -185,6 +183,8 @@ void Monta_assembly(char *nome_do_arquivo){
 
         
         i--; 
+
+        /*
         if(i==1){
             printf("Termos na linha: %s\nQuantidade: %d\n\n", termo1, i);
         }
@@ -197,6 +197,7 @@ void Monta_assembly(char *nome_do_arquivo){
         if(i==4){
             printf("Termos na linha: %s %s %s %s\nQuantidade: %d\n\n", termo1, termo2, termo3, termo4, i);
         } 
+        */
 
         k++; 
 
@@ -209,11 +210,11 @@ void Monta_assembly(char *nome_do_arquivo){
 
             // se estamos tratando de uma label
             
-            if( !(strcmp(termo2, "EQU") == 0) ){ 
+            if( (!(strcmp(termo2, "EQU") == 0)) || (!(strcmp(termo2, "equ") == 0)) ){ 
                 // uma label mas não é uma diretiva de EQU
                 somador = tamanho_op(termo2); 
                 acumulador_do_endereco = acumulador_do_endereco + somador;
-                printf("\nÉ label!\n");
+                //printf("\nÉ label!\n");
             }
             
             for(x=0; x<50; x++){
@@ -231,7 +232,7 @@ void Monta_assembly(char *nome_do_arquivo){
 
 
 
-            if( (strcmp(termo2, "EQU") == 0) ){
+            if( (strcmp(termo2, "EQU") == 0) || (strcmp(termo2, "equ") == 0) ){
 
                 if(passou_section_text == 1){
 
@@ -248,7 +249,7 @@ void Monta_assembly(char *nome_do_arquivo){
 
                 if(passou_section_data == 0){
 
-                    if( (strcmp(termo2, "CONST") == 0) || (strcmp(termo2, "SPACE") == 0) ){
+                    if( (strcmp(termo2, "CONST") == 0) || (strcmp(termo2, "SPACE") == 0) || (strcmp(termo2, "const") == 0) || (strcmp(termo2, "space") == 0) ){
 
                         printf("\nErro na linha %d: esta diretiva é para ocorrer depois do SECTION DATA!\nErro semântico.\n", k); 
                         exit(0); 
@@ -267,17 +268,10 @@ void Monta_assembly(char *nome_do_arquivo){
 
             if(simbolos_existentes < linhas_no_arquivo){
                 simbolos_existentes++;
-                printf("%d", linhas_no_arquivo);
-                printf(">>>>%d\n", simbolos_existentes);
+                //printf("%d", linhas_no_arquivo);
+                //printf(">>>>%d\n", simbolos_existentes);
             }
             
-            //printf("!!! %s", codigo_obj[linha_atual][0]);
-
-            if( !(strcmp(termo2, "SPACE") == 0) && !(strcmp(termo2, "CONST") == 0) ){
-
-                //strcpy(codigo_obj[linha_atual][1], termo1);
-                
-            }
 
             linha_atual++;
 
@@ -288,23 +282,20 @@ void Monta_assembly(char *nome_do_arquivo){
 
             //strcpy(codigo_obj[linha_atual][0], end_em_string);
 
-            if( !(strcmp(termo1, "SECTION") == 0) ){
-
-                //strcpy(codigo_obj[linha_atual][0], end_em_string);
-                // tem que pular essa linha
+            if( !(strcmp(termo1, "SECTION") == 0) && !(strcmp(termo1, "section") == 0) ){
       
                 acumulador_do_endereco = acumulador_do_endereco + somador;
 
                 linha_atual++;
             }   
 
-            if((strcmp(termo2, "TEXT") == 0)){
+            if((strcmp(termo2, "TEXT") == 0) || (strcmp(termo2, "text") == 0)){
 
                 passou_section_text = 1; 
 
             }
 
-            if((strcmp(termo2, "DATA") == 0)){
+            if((strcmp(termo2, "DATA") == 0) || (strcmp(termo2, "data") == 0)){
 
                 passou_section_data = 1;
 
@@ -327,8 +318,6 @@ void Monta_assembly(char *nome_do_arquivo){
         printf("\n"); 
     }
 
-    printf("\n");
-
     file_pre = fopen(nome_do_arquivo_pre, "r");
 
     // abrir o arquivo final, criando ele junto fopen(nome_do_arquivo_pre, "r");
@@ -349,10 +338,11 @@ void Monta_assembly(char *nome_do_arquivo){
     passou_section_data = 0;
 
     file_obj = fopen(nome_do_arquivo_obj, "a");
-    printf("%s\n\n", nome_do_arquivo_obj); 
+    //printf("%s\n\n", nome_do_arquivo_obj); 
 
     if(file_obj == NULL){
         printf("Deu algo errado na abertura do arquivo\n"); 
+        exit(0); 
     }
 
     k = 0; 
@@ -374,7 +364,7 @@ void Monta_assembly(char *nome_do_arquivo){
         i = 1; 
 
         do{
-            printf("%s \n\n\n", tokens);
+            //printf("%s \n\n\n", tokens);
             
             //if(tokens != NULL){
                 switch(i){
@@ -398,6 +388,8 @@ void Monta_assembly(char *nome_do_arquivo){
 
         
         i--; 
+        
+        /*
         if(i==1){
             printf("Termos na linha: %s\nQuantidade: %d\n\n", termo1, i);
         }
@@ -410,12 +402,13 @@ void Monta_assembly(char *nome_do_arquivo){
         if(i==4){
             printf("Termos na linha: %s %s %s %s\nQuantidade: %d\n\n", termo1, termo2, termo3, termo4, i);
         } 
-
+        */
+        
         k++; 
 
         //somador = tamanho_op(termo1); 
 
-        if(strcmp(termo1, "STOP") == 0){
+        if((strcmp(termo1, "STOP") == 0) || (strcmp(termo1, "stop") == 0) ){
 
             passou_do_stop = 1;
 
@@ -469,17 +462,17 @@ void Monta_assembly(char *nome_do_arquivo){
             }
 
 
-            if((strcmp(termo2, "SPACE") == 0)){
+            if((strcmp(termo2, "SPACE") == 0) || (strcmp(termo2, "space") == 0)){
             
                 // se o segundo termo da linha é SPACE, devemos imprimir "OO"
-                printf("OO "); 
+                
                 fprintf(file_obj, "OO ");
 
 
             }
-            if((strcmp(termo2, "CONST") == 0)){
+            if((strcmp(termo2, "CONST") == 0) || (strcmp(termo2, "const") == 0)){
 
-                printf("%s ", termo3); 
+                 
                 fprintf(file_obj, "%s ", termo3);
 
             }
@@ -492,11 +485,14 @@ void Monta_assembly(char *nome_do_arquivo){
 
                     // não achamos essa operação na tabela
 
-                    if(!(strcmp(termo2, "EQU") == 0) && !(strcmp(termo2, "CONST") == 0) && !(strcmp(termo2, "SPACE") == 0)){
+                    if( !(strcmp(termo2, "EQU") == 0) && !(strcmp(termo2, "CONST") == 0) && !(strcmp(termo2, "SPACE") == 0) && 
+                    !(strcmp(termo2, "equ") == 0) && !(strcmp(termo2, "const") == 0) && !(strcmp(termo2, "space") == 0)){
+                        
                         printf("\nErro na linha %d: diretiva inválida após criação de label!\nErro sintático.\n", k);
                         fclose(file_obj); 
                         remove(nome_do_arquivo_obj);
                         exit(0); 
+
                     }
 
                 }
@@ -505,7 +501,7 @@ void Monta_assembly(char *nome_do_arquivo){
                     // achamos a operação, que deverá ser acompanhada de i valores da Tabela de Símbolos
 
                     // imprimiu a operação
-                    printf("%d ", op);
+                    
                     fprintf(file_obj, "%d ", op);
 
                     if(i == 3){
@@ -515,7 +511,7 @@ void Monta_assembly(char *nome_do_arquivo){
                         for(x=0; x<simbolos_existentes ; x++){
                             if( strcmp(termo3, tabela_de_simbolos[x][0]) == 0 ){
                                 // achamos o símbolo
-                                printf("%s ", tabela_de_simbolos[x][1]);
+                               
                                 fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]);  
                                 simbolo_encontrado = 1;
                             }
@@ -538,7 +534,7 @@ void Monta_assembly(char *nome_do_arquivo){
                         for(x=0; x<simbolos_existentes ; x++){
                             if( strcmp(termo3, tabela_de_simbolos[x][0]) == 0 ){
                                 // achamos o símbolo
-                                printf("%s ", tabela_de_simbolos[x][1]);
+                                
                                 fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]);   
                                 simbolo_encontrado = 1;
                             } 
@@ -556,7 +552,7 @@ void Monta_assembly(char *nome_do_arquivo){
                         for(x=0; x<simbolos_existentes ; x++){
                             if( strcmp(termo4, tabela_de_simbolos[x][0]) == 0 ){
                                 // achamos o símbolo
-                                printf("%s ", tabela_de_simbolos[x][1]);  
+                                 
                                 fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]);
                                 simbolo_encontrado = 1;
                             }
@@ -583,7 +579,7 @@ void Monta_assembly(char *nome_do_arquivo){
 
             // não estamos tratando de uma label
 
-            if( !(strcmp(termo1, "SECTION") == 0) ){ // ignoramos os sections por agora
+            if( !(strcmp(termo1, "SECTION") == 0) && !(strcmp(termo1, "section") == 0) ){ // ignoramos os sections por agora
 
                 // decodifica o termo 1, ve quantos termos tem e procura esses termos na Tabela de Simbolos
 
@@ -592,7 +588,7 @@ void Monta_assembly(char *nome_do_arquivo){
                 if(i == somador){
                     // a quantidade de instruções passadas está correta
                     op = define_op_code(termo1);
-                    printf("%d ", op);
+                    //printf("%d ", op);
 
                     if(op == 0){
 
@@ -610,7 +606,7 @@ void Monta_assembly(char *nome_do_arquivo){
                         for(x=0; x<simbolos_existentes ; x++){
                             if( strcmp(termo2, tabela_de_simbolos[x][0]) == 0 ){
                                 // achamos o símbolo
-                                printf("%s ", tabela_de_simbolos[x][1]); 
+                                
                                 fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]); 
                                 simbolo_encontrado = 1;
                                 
@@ -633,7 +629,7 @@ void Monta_assembly(char *nome_do_arquivo){
                         for(x=0; x<simbolos_existentes ; x++){
                             if( strcmp(termo2, tabela_de_simbolos[x][0]) == 0 ){
                                 // achamos o símbolo
-                                printf("%s ", tabela_de_simbolos[x][1]);  
+                                 
                                 fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]);
                                 simbolo_encontrado = 1;
                             } 
@@ -650,9 +646,10 @@ void Monta_assembly(char *nome_do_arquivo){
                         for(x=0; x<simbolos_existentes ; x++){
                             if( strcmp(termo3, tabela_de_simbolos[x][0]) == 0 ){
                                 // achamos o símbolo
-                                printf("%s ", tabela_de_simbolos[x][1]);  
+                                 
                                 fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]);
                                 simbolo_encontrado = 1;
+
                             } 
                         }
 
@@ -675,7 +672,6 @@ void Monta_assembly(char *nome_do_arquivo){
                     exit(0); 
                 }
 
-                printf("\n"); 
                 //fprintf(file_obj, "\n");
             
             }
@@ -683,13 +679,13 @@ void Monta_assembly(char *nome_do_arquivo){
             else{
                 // é um section
                 // se não for SECTION TEXT ou SECTION DATA, está errado
-                if((strcmp(termo2, "TEXT") == 0)){
+                if((strcmp(termo2, "TEXT") == 0) || (strcmp(termo2, "text") == 0)){
                     // código passando por um section 
                     passou_section_text = 1; 
 
                 }
                 else{
-                    if((strcmp(termo2, "DATA") == 0)){
+                    if((strcmp(termo2, "DATA") == 0) || (strcmp(termo2, "data") == 0)){
                         // código passando por um section data
                         passou_section_data = 1; 
 
@@ -748,5 +744,7 @@ void Monta_assembly(char *nome_do_arquivo){
 
     fclose(file_pre);
     fclose(file_obj); 
-    //remove(nome_do_arquivo_pre);
+    
+    printf("\nArquivo .obj gerado com sucesso!\n");
+
 }

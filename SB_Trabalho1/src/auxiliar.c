@@ -13,7 +13,7 @@ int acha_label(char *termo){
     int i; 
     i = 0; 
 
-    if(strcmp(termo, "IF:") == 0){
+    if((strcmp(termo, "IF:") == 0) || (strcmp(termo, "if:") == 0)){
         return 2; 
     }
 
@@ -69,6 +69,7 @@ int counter (FILE *fp) {
       }while(c!= EOF);
   }else {
     printf("Impossivel abrir o arquivo\n");  // erro!
+    exit(0); 
   }
   return numCod;
 }

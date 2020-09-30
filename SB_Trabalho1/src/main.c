@@ -33,7 +33,6 @@ int main(int argc, char *argv[]) {
   char nome_do_arquivo[30]; 
   char instrucao[2]; 
 
-
   printf("Foi passado na linha de comando:\n"); 
 
   for(i=0; i<argc; i++){

@@ -14,22 +14,24 @@ void Pre_p(char *nome_do_arquivo) {
     // vamos satisfazer os ifs e apagar comentarios, exportando tudo num arquivo 
     // apago o que esta de baixo de um if falso ate um if positivo aparecer, e apago comentários
 
-    int i, conta_equs, j, y, pula_linha, pula_prox_linha;
+    int i, conta_equs, j, y;
     y=0; 
     char *resultado_de_leitura; 
-    char linha_reserva[200];
     char *linha; // 200 espaços por linha como margem de segurança pois cada rótulo é variável tem até 50 caracteres cada 
                     // se a linha ocupa muito mais do que isso logo tem um comentário que é imediatamente descartado
 
-    char divisor[] = "\n "; 
-    char *tokens; 
+    char char_atual;
+     
+    char *tokens; // cada linha do arquivo é dividida em tokens a serem analisadas
+    char divisor[] = "\n "; // com base no espaço e na mudança de linhas as linhas no arquivo serão divididas
 
-    char equ[3] = "EQU"; 
+    // -----------------------------
+    // tratamento dos arquivos
 
     int tamanho_do_nome_do_arquivo; 
 
     tamanho_do_nome_do_arquivo = strlen(nome_do_arquivo);
-
+    
     char *novo_nome_do_arquivo; 
 
     novo_nome_do_arquivo = (char *) malloc(tamanho_do_nome_do_arquivo * sizeof(char));
@@ -49,8 +51,10 @@ void Pre_p(char *nome_do_arquivo) {
 
     }
 
-    char tabela_EQU[50][4][50]; 
+    // -----------------------------
+    // tratamento de EQU e tokens
 
+    char tabela_EQU[50][4][50]; 
     // 50 possiveis simbolos de equ/4 dimensoes/cada dimensão tem 50 de espaço
 
     int limite_tam_termo = 50; 
@@ -61,7 +65,6 @@ void Pre_p(char *nome_do_arquivo) {
 
     char ch = ':';
 
-    pula_prox_linha = 0;
     int conta_linhas = 0; 
 
     termo1 = (char *) malloc(limite_tam_termo * sizeof(char)); 
@@ -71,14 +74,20 @@ void Pre_p(char *nome_do_arquivo) {
 
     linha = (char *) malloc((4*limite_tam_termo) * sizeof(char));
  
+    // -----------------------------
+    // flags
+
     int tem_label;
     int passou_do_sectiontext = 0; 
 
     int if_valido = 0;
     int conta_simbolos; 
+    int pula_linha, pula_prox_linha; 
 
-    printf("Este é o nome do arquivo passado: %s\n", nome_do_arquivo); 
-    printf("\n"); 
+    // -----------------------------
+    // tratamento de arquivos
+
+    printf("Este é o nome do arquivo passado: %s\n", nome_do_arquivo);  
 
     FILE *file; 
     FILE *file_teste;
@@ -104,6 +113,10 @@ void Pre_p(char *nome_do_arquivo) {
     conta_equs = 0; 
     j = 0; 
     pula_linha = 0;
+    pula_prox_linha = 0;
+
+    // -----------------------------
+    // Loop da leitura de tokens
 
     while(!feof(file)){
 
@@ -114,19 +127,14 @@ void Pre_p(char *nome_do_arquivo) {
             pula_prox_linha = 0;
         }
 
-        // a que a gnt vai dividir em tokens
+        // linha que vai ser dividida em tokens
         resultado_de_leitura = fgets(linha, 100, file); 
-
-        // a que vai pro documento do pre-processamento
-        strcpy(linha_reserva, linha);
-
-        //printf("!!!%s!!!", linha);
 
         tokens = strtok(linha, divisor);
         i = 1; 
 
         while(tokens != NULL){
-            printf("%s \n\n\n", tokens);
+            //printf("%s \n\n\n", tokens);
             
             if(tokens != NULL){
                 switch(i){
@@ -144,9 +152,15 @@ void Pre_p(char *nome_do_arquivo) {
             //printf("%s %s %s", termo1, termo2, termo3); 
             tokens = strtok(NULL, divisor); 
         }
+
+
+        // numa linha temos no máximo um rotulo com uma inst de 2 operandos, totalizando 4 termos
+        // assim checo se um termo é comentário e passo a ignora-lo 
+        // se havia um comentário após as 4 tokens, já foi descartado
+
         i--; 
         if(i==1){
-            printf("Termos na linha: %s\nQuantidade: %d\n\n", termo1, i);
+            //printf("Termos na linha: %s\nQuantidade: %d\n\n", termo1, i);
 
             if(termo1[0] == ';'){
                 pula_linha = 1; 
@@ -158,7 +172,7 @@ void Pre_p(char *nome_do_arquivo) {
 
         }
         if(i==2){
-            printf("Termos na linha: %s %s\nQuantidade: %d\n\n", termo1, termo2, i);
+            //printf("Termos na linha: %s %s\nQuantidade: %d\n\n", termo1, termo2, i);
 
             if(termo2[0] == ';'){
                 termo2[0] = '\0';
@@ -176,7 +190,7 @@ void Pre_p(char *nome_do_arquivo) {
 
         }
         if(i==3){
-            printf("Termos na linha: %s %s %s\nQuantidade: %d\n\n", termo1, termo2, termo3, i);
+            //printf("Termos na linha: %s %s %s\nQuantidade: %d\n\n", termo1, termo2, termo3, i);
 
             if(termo3[0] == ';'){
                 termo3[0] = '\0';
@@ -198,7 +212,7 @@ void Pre_p(char *nome_do_arquivo) {
             }
         }
         if(i==4){
-            printf("Termos na linha: %s %s %s %s\nQuantidade: %d\n\n", termo1, termo2, termo3, termo4, i);
+            //printf("Termos na linha: %s %s %s %s\nQuantidade: %d\n\n", termo1, termo2, termo3, termo4, i);
             
             if(termo4[0] == ';'){
                 termo4[0] = '\0'; 
@@ -224,73 +238,48 @@ void Pre_p(char *nome_do_arquivo) {
             }
         }    
          
-        // acho q n tá funcionando isso daqui :/
-        //memset(termo1, 0, 50); 
-        //memset(termo2, 0, 50); 
-        //memset(termo3, 0, 50); 
 
-
-        // "i" é a quantidade de tokens que achamos
+        // "i" é a quantidade de tokens que existem na linha
         // cada string "termoX" é a string com uma das tokens encontradas
         // para o pre processamento, vamos ler o arquivo e ir tirando as linhas que os IFs mandam tirar
         // IF só vai existir se teve um EQU antes
 
-        printf("\n\ntermo 1 : %s\n\n", termo1); 
-
         tem_label = acha_label(termo1); 
 
         if (tem_label == 1){
-            conta_simbolos++; 
-            printf("é label"); 
+            conta_simbolos++;  
         }
 
-        if ( (passou_do_sectiontext == 1) && (strcmp(termo2, "EQU") == 0) ){
+        if ( ((passou_do_sectiontext == 1) && (strcmp(termo2, "EQU") == 0)) || ((passou_do_sectiontext == 1) && (strcmp(termo2, "equ") == 0)) ){
             
             printf("\nErro na linha %d: não era para ter um EQU depois do SECTION TEXT!\nErro semântico.\n", conta_linhas); 
             exit(0); 
         }
 
         if(tem_label == 1 && passou_do_sectiontext == 0){
+
             // bota os primeiros simbolos q vamos descartar no arquivo pre-processado final numa tabela
-            // não escrevemos essa linha no arquivo
+            // não se escreve essa linha no arquivo
 
             // tabela de EQU tem a estrutura termo1/termo2/"vai ser descartado ou não"?
 
             y=0;
             while(y < conta_equs){
 
-                printf("\ncomparei %s e %s\n", termo1, tabela_EQU[y][0]);
+                //printf("\ncomparei %s e %s\n", termo1, tabela_EQU[y][0]);
 
                 if(strcmp(tabela_EQU[y][0], termo1) == 0){
 
                     printf("\nErro na linha %d: diretiva EQU redefinindo uma label!\nErro semântico.\n", conta_linhas); 
                     exit(0); 
-
-                    //printf("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%s %s\n\n", tabela_EQU[y][0], termo2);
                 }
                 y++;
             }
 
             strcpy(tabela_EQU[conta_equs][0], termo1);
 
-            y=0;
-            j=0;
-
-            //j=0;
-
-            //while(termo1[j] != '\0'){
-               // tabela_EQU[y][0][j] = termo1[j]; 
-              //  j++; 
-            //}
-
             strcpy(tabela_EQU[conta_equs][1], termo2);
-            
-            j=0; 
-
-            //while(termo2[j] != '\0'){
-              //  tabela_EQU[y][1][j] = termo1[j]; 
-               // j++; 
-            //}
+    
             strcpy(tabela_EQU[conta_equs][2], termo3);
 
             tabela_EQU[conta_equs][3][0] = '0';
@@ -300,24 +289,12 @@ void Pre_p(char *nome_do_arquivo) {
 
         }
 
-
-        if(tem_label == 1 && passou_do_sectiontext == 1){
-            // é uma label dentro do section text
-            // escrevemos essa linha no arquivo
-
-        }
-
-        if(tem_label == 0){
-            // escreve a linha no arquivo pre-processado
-
-        }
-
-
         if(tem_label == 2){
+
             // achou o if
             // procura o simbolo na tabela temporaria pra ver se o proximo simbolo vai ser escrito no arquivo
             // a atual linha não será escrita
-            // se if == 1, linha seguinte é ignoradas
+            // se if == 1, linha seguinte é ignorada
 
             pula_linha = 1;
 
@@ -326,22 +303,21 @@ void Pre_p(char *nome_do_arquivo) {
             y=0;
             while(y < conta_equs){
 
-                printf("\ncomparei %s e %s\n", termo2, tabela_EQU[y][0]);
+                //printf("\ncomparei %s e %s\n", termo2, tabela_EQU[y][0]);
 
                 if(strcmp(tabela_EQU[y][0], termo2) == 0){
 
                     tabela_EQU[y][3][0] = '1';
-                    printf("\nachei\n"); 
-                    printf("\ncomparei %s e 0\n", tabela_EQU[y][2]);
+                    //printf("\nachei\n"); 
+                    //printf("\ncomparei %s e 0\n", tabela_EQU[y][2]);
 
                     if_valido = 1;
 
                     if(strcmp(tabela_EQU[y][2], "0") == 0){
-                        printf("ignora a proxima linha!");
+                        //printf("ignora a proxima linha!");
                         pula_prox_linha = 1; 
                     }
                     
-                    //printf("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%s %s\n\n", tabela_EQU[y][0], termo2);
                 }
                 y++;
             }
@@ -355,23 +331,23 @@ void Pre_p(char *nome_do_arquivo) {
 
         }
 
-        // escreve tudo num temp sem os EQU, ai escreve os EQUs importantes em um novo arquivo e ai então insere as linhas do arquivo antigo?
-
-        printf("\n---------TEM LABEL?: %d\n", tem_label);
-
         tem_label = 0; 
 
 
-        if(strcmp(termo2, "TEXT") == 0){
+        if((strcmp(termo2, "TEXT") == 0) || (strcmp(termo2, "text") == 0)){
+            
             // detro do section text, todos os rotulos q vieram antes podem ser apagados do contador
             // pode ser q estes sirvam apenas para os ifs
+            
             conta_simbolos = 0; 
             passou_do_sectiontext = 1; 
             pula_linha = 0;
         }
 
-        if(strcmp(termo1, "COPY") == 0){
-            // vamos tirar a virgula do final do termo 2 só para ajudar 
+        if((strcmp(termo1, "COPY") == 0) || (strcmp(termo1, "copy") == 0)){
+            
+            // tiro a virgula do final do termo 2 para ajudar 
+
             j=0;
             y=0;
             while(j==0){
@@ -384,21 +360,6 @@ void Pre_p(char *nome_do_arquivo) {
             }
             
         }
-
-        // numa linha tenho no máximo um rotulo com uma inst de 2 operandos, totalizando 4 termos
-        // assim checo se um termo é comentário e passo a ignora-lo 
-        if(termo4[0] == ';'){
-            printf("\n\nAchei o comentário\n\n");
-            //apaga ele e continua
-
-        }
-
-
-        if(resultado_de_leitura){
-            //printf("!!!%s!!!", linha);
-        }
-        //printf("\n");
-    
     
         if(pula_linha == 0){
             switch(i){
@@ -428,22 +389,9 @@ void Pre_p(char *nome_do_arquivo) {
 
     fclose(file);
 
-    /*
 
-    for(i=0; i<3; i++){
-        
-            
-        printf("%c ", tabela_EQU[i][3][0]); 
-           
-        
-        printf("\n"); 
-    }
-    */
-
-    // temos a tabela equ do q foi usado ou nao nos ifs, um arquivo de texto com as linhas limpas
-    // junta tudo em 1 arquivo só
-
-    printf("%s %d", novo_nome_do_arquivo, conta_equs); 
+    // obtém-se a tabela equ do q foi usado ou nao nos ifs, um arquivo de texto com as linhas limpas
+    // junta tudo no arquivo .pre final
 
     for(i=0 ; i<conta_equs ; i++){
 
@@ -456,38 +404,27 @@ void Pre_p(char *nome_do_arquivo) {
 
     }
 
-    char c; 
-
     fclose(file_teste);
 
     file_teste = fopen("teste.txt", "r");
 
     
 
-    while((c = fgetc(file_teste)) != EOF){
-        printf("%c", c);
-        fprintf(file_final, "%c", c);
+    while((char_atual = fgetc(file_teste)) != EOF){
+        //printf("%c", char_atual);
+        fprintf(file_final, "%c", char_atual);
     }
 
-    //resultado_de_leitura = fgets(linha, 200, file_teste);
-    //printf("%s", resultado_de_leitura); 
 
-    //while(!feof(file_teste)){
-
-    //    resultado_de_leitura = fgets(linha, 100, file_teste);
-    //    resultado = fputs(linha, file_final); 
-
-    //}
-    
-
-
-    printf("\nQuantidade de símbolos para a atabela de símbolos: %d\n", conta_simbolos); 
+    //printf("\nQuantidade de símbolos para a atabela de símbolos: %d\n", conta_simbolos); 
     
     fclose(file_teste);
 
     remove("teste.txt");
     
     fclose(file_final);
+
+    printf("\nArquivo .pre gerado com sucesso!\n"); 
 
 }
 
