@@ -37,14 +37,13 @@ int tamanho_op(char *opcode){
         return 3; 
     }
 
-    if((strcmp(opcode, "SECTION") == 0) || (strcmp(opcode, "section") == 0)){
+    if((strcmp(opcode, "SECTION") == 0) || (strcmp(opcode, "section") == 0) || (strcmp(opcode, "EQU") == 0) || (strcmp(opcode, "equ") == 0)){
         return 0; 
     }
 
     if((strcmp(opcode, "STOP") == 0) || (strcmp(opcode, "stop") == 0) || 
     (strcmp(opcode, "SPACE") == 0) || (strcmp(opcode, "space") == 0) || 
-    (strcmp(opcode, "CONST") == 0) || (strcmp(opcode, "CONST") == 0) ||
-    (strcmp(opcode, "EQU") == 0) || (strcmp(opcode, "equ") == 0) )
+    (strcmp(opcode, "CONST") == 0) || (strcmp(opcode, "const") == 0) )
     {
         return 1; 
     }
