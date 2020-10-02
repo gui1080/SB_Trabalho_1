@@ -211,10 +211,18 @@ void Monta_assembly(char *nome_do_arquivo){
             // se estamos tratando de uma label
             
             if( (!(strcmp(termo2, "EQU") == 0)) || (!(strcmp(termo2, "equ") == 0)) ){ 
-                // uma label mas não é uma diretiva de EQU
-                somador = tamanho_op(termo2); 
-                acumulador_do_endereco = acumulador_do_endereco + somador;
-                //printf("\nÉ label!\n");
+
+                if(i != 1){
+
+                    // uma label mas não é uma diretiva de EQU e não está sozinha na linha
+                    somador = tamanho_op(termo2); 
+                    acumulador_do_endereco = acumulador_do_endereco + somador;
+                    //printf("\nÉ label!\n");
+                    
+                }
+                else{
+                    somador = 0; 
+                }
             }
             
             for(x=0; x<50; x++){
@@ -419,7 +427,7 @@ void Monta_assembly(char *nome_do_arquivo){
 
         if (tem_label == 1){
 
-            if( acha_label(termo2) ){
+            if( (acha_label(termo2)) && (i != 1) ){
                 // duas labels na mesma linha!!!
                 printf("\nErro na linha %d: duas labels definidas na mesma linha!\nErro sintático.\n", k);
                 fclose(file_obj); 
@@ -479,96 +487,103 @@ void Monta_assembly(char *nome_do_arquivo){
 
             else{
 
-                op = define_op_code(termo2);
-                
-                if(op == 0){
+                if(i != 1){
+                    op = define_op_code(termo2);
+                    
+                    if(op == 0){
 
-                    // não achamos essa operação na tabela
+                        // não achamos essa operação na tabela
 
-                    if( !(strcmp(termo2, "EQU") == 0) && !(strcmp(termo2, "CONST") == 0) && !(strcmp(termo2, "SPACE") == 0) && 
-                    !(strcmp(termo2, "equ") == 0) && !(strcmp(termo2, "const") == 0) && !(strcmp(termo2, "space") == 0)){
-                        
-                        printf("\nErro na linha %d: diretiva inválida após criação de label!\nErro sintático.\n", k);
-                        fclose(file_obj); 
-                        remove(nome_do_arquivo_obj);
-                        exit(0); 
+                        if( !(strcmp(termo2, "EQU") == 0) && !(strcmp(termo2, "CONST") == 0) && !(strcmp(termo2, "SPACE") == 0) && 
+                        !(strcmp(termo2, "equ") == 0) && !(strcmp(termo2, "const") == 0) && !(strcmp(termo2, "space") == 0)){
+                            
+                            printf("\nErro na linha %d: diretiva inválida após criação de label!\nErro sintático.\n", k);
+                            fclose(file_obj); 
+                            remove(nome_do_arquivo_obj);
+                            exit(0); 
+
+                        }
 
                     }
+                    else{
 
+                        // achamos a operação, que deverá ser acompanhada de i valores da Tabela de Símbolos
+
+                        // imprimiu a operação
+                        
+                        fprintf(file_obj, "%d ", op);
+
+                        if(i == 3){
+                            
+                            // tem 1 simbolo da TS pra imprimir
+
+                            for(x=0; x<simbolos_existentes ; x++){
+                                if( strcmp(termo3, tabela_de_simbolos[x][0]) == 0 ){
+                                    // achamos o símbolo
+                                
+                                    fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]);  
+                                    simbolo_encontrado = 1;
+                                }
+                            }
+                            if(simbolo_encontrado == 1){
+                                simbolo_encontrado = 0;
+                            }
+                            else{
+                                printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k);
+                                fclose(file_obj); 
+                                remove(nome_do_arquivo_obj); 
+                                exit(0);
+                            }
+
+                        } 
+                        if(i == 4){
+                            
+                            // tem 2 simbolo da TS pra imprimir
+
+                            for(x=0; x<simbolos_existentes ; x++){
+                                if( strcmp(termo3, tabela_de_simbolos[x][0]) == 0 ){
+                                    // achamos o símbolo
+                                    
+                                    fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]);   
+                                    simbolo_encontrado = 1;
+                                } 
+                            }
+                            if(simbolo_encontrado == 1){
+                                simbolo_encontrado = 0;
+                            }
+                            else{
+                                printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
+                                fclose(file_obj); 
+                                remove(nome_do_arquivo_obj);
+                                exit(0);
+                            }
+
+                            for(x=0; x<simbolos_existentes ; x++){
+                                if( strcmp(termo4, tabela_de_simbolos[x][0]) == 0 ){
+                                    // achamos o símbolo
+                                    
+                                    fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]);
+                                    simbolo_encontrado = 1;
+                                }
+                            }
+                            if(simbolo_encontrado == 1){
+                                simbolo_encontrado = 0;
+                            }
+                            else{
+                                printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
+                                fclose(file_obj); 
+                                remove(nome_do_arquivo_obj);
+                                exit(0);
+                            } 
+
+                        } 
+
+
+                    }
                 }
                 else{
 
-                    // achamos a operação, que deverá ser acompanhada de i valores da Tabela de Símbolos
-
-                    // imprimiu a operação
-                    
-                    fprintf(file_obj, "%d ", op);
-
-                    if(i == 3){
-                        
-                        // tem 1 simbolo da TS pra imprimir
-
-                        for(x=0; x<simbolos_existentes ; x++){
-                            if( strcmp(termo3, tabela_de_simbolos[x][0]) == 0 ){
-                                // achamos o símbolo
-                               
-                                fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]);  
-                                simbolo_encontrado = 1;
-                            }
-                        }
-                        if(simbolo_encontrado == 1){
-                            simbolo_encontrado = 0;
-                        }
-                        else{
-                            printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k);
-                            fclose(file_obj); 
-                            remove(nome_do_arquivo_obj); 
-                            exit(0);
-                        }
-
-                    } 
-                    if(i == 4){
-                        
-                        // tem 2 simbolo da TS pra imprimir
-
-                        for(x=0; x<simbolos_existentes ; x++){
-                            if( strcmp(termo3, tabela_de_simbolos[x][0]) == 0 ){
-                                // achamos o símbolo
-                                
-                                fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]);   
-                                simbolo_encontrado = 1;
-                            } 
-                        }
-                        if(simbolo_encontrado == 1){
-                            simbolo_encontrado = 0;
-                        }
-                        else{
-                            printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
-                            fclose(file_obj); 
-                            remove(nome_do_arquivo_obj);
-                            exit(0);
-                        }
-
-                        for(x=0; x<simbolos_existentes ; x++){
-                            if( strcmp(termo4, tabela_de_simbolos[x][0]) == 0 ){
-                                // achamos o símbolo
-                                 
-                                fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]);
-                                simbolo_encontrado = 1;
-                            }
-                        }
-                        if(simbolo_encontrado == 1){
-                            simbolo_encontrado = 0;
-                        }
-                        else{
-                            printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
-                            fclose(file_obj); 
-                            remove(nome_do_arquivo_obj);
-                            exit(0);
-                        } 
-
-                    } 
-
+                    // estamos passando por uma label sozinha na linha sem nada a fazer
 
                 }
             

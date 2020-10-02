@@ -352,17 +352,38 @@ void Pre_p(char *nome_do_arquivo) {
 
         if((strcmp(termo1, "COPY") == 0) || (strcmp(termo1, "copy") == 0)){
             
-            // tiro a virgula do final do termo 2 para ajudar 
+            // tiro a virgula do final do termo 2 para ajudar mais adiante e para checar erro
+            // a estrutura do copy é: COPY X, Y
+            // o segundo termo deve terminar em "," ou está equivocado 
 
             j=0;
             y=0;
-            while(j==0){
+
+             
+
+            while(termo2[y] != '\0'){
 
                 if(termo2[y] == ','){
                     termo2[y] = '\0';
                     j=1;
                 }
                 y++;
+            }
+            
+            y=0;
+            while(termo3[y] != '\0'){
+
+                if(termo3[y] == ','){
+                    j=0;
+                }
+                y++;
+            }
+
+            if(j==0){
+                
+                printf("\nErro na linha %d: Não é assim que se declara um COPY!\nErro sintático.\n", conta_linhas); 
+                exit(0); 
+            
             }
             
         }
