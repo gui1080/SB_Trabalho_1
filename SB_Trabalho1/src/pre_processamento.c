@@ -11,8 +11,8 @@
 
 void Pre_p(char *nome_do_arquivo) {
 
-    // vamos satisfazer os ifs e apagar comentarios, exportando tudo num arquivo 
-    // apago o que esta de baixo de um if falso ate um if positivo aparecer, e apago comentários
+    // vamos satisfazer os ifs e apagar comentarios, exportando tudo num arquivo .pre
+    // deve-se apagar o que esta imediatamente baixo de um if falso
 
     int i, conta_equs, j, y;
     y=0; 
@@ -46,6 +46,8 @@ void Pre_p(char *nome_do_arquivo) {
         nome_do_arquivo[tamanho_do_nome_do_arquivo-2] != 's' ||
         nome_do_arquivo[tamanho_do_nome_do_arquivo-3] != 'a'){
 
+        // descobrimos que não foi passado umm arquivo .asm
+
         printf("Erro no formato do arquivo passado!\n"); 
         exit(0);         
 
@@ -55,7 +57,7 @@ void Pre_p(char *nome_do_arquivo) {
     // tratamento de EQU e tokens
 
     char tabela_EQU[50][4][50]; 
-    // 50 possiveis simbolos de equ/4 dimensoes/cada dimensão tem 50 de espaço
+    // 50 possiveis simbolos de equ/4 dimensoes/cada dimensão tem 50 espaços
 
     int limite_tam_termo = 50; 
     char *termo1;
@@ -136,6 +138,13 @@ void Pre_p(char *nome_do_arquivo) {
         // linha que vai ser dividida em tokens
         resultado_de_leitura = fgets(linha, 100, file); 
 
+        if(strcmp(linha, "\n") == 0){
+
+            // ignora linha vazia
+
+            pula_linha = 1; 
+        }
+
         tokens = strtok(linha, divisor);
         i = 1; 
 
@@ -164,8 +173,11 @@ void Pre_p(char *nome_do_arquivo) {
         // assim checo se um termo é comentário e passo a ignora-lo 
         // se havia um comentário após as 4 tokens, já foi descartado
 
+        // i é a quantidade de tokens na linha
+
         i--; 
         if(i==1){
+
             //printf("Termos na linha: %s\nQuantidade: %d\n\n", termo1, i);
 
             if(termo1[0] == ';'){
@@ -178,6 +190,7 @@ void Pre_p(char *nome_do_arquivo) {
 
         }
         if(i==2){
+            
             //printf("Termos na linha: %s %s\nQuantidade: %d\n\n", termo1, termo2, i);
 
             if(termo2[0] == ';'){
@@ -196,6 +209,7 @@ void Pre_p(char *nome_do_arquivo) {
 
         }
         if(i==3){
+
             //printf("Termos na linha: %s %s %s\nQuantidade: %d\n\n", termo1, termo2, termo3, i);
 
             if(termo3[0] == ';'){
@@ -218,6 +232,7 @@ void Pre_p(char *nome_do_arquivo) {
             }
         }
         if(i==4){
+
             //printf("Termos na linha: %s %s %s %s\nQuantidade: %d\n\n", termo1, termo2, termo3, termo4, i);
             
             if(termo4[0] == ';'){
@@ -247,7 +262,7 @@ void Pre_p(char *nome_do_arquivo) {
 
         // "i" é a quantidade de tokens que existem na linha
         // cada string "termoX" é a string com uma das tokens encontradas
-        // para o pre processamento, vamos ler o arquivo e ir tirando as linhas que os IFs mandam tirar
+        // para o pre processamento, deve-se ler o arquivo e ir tirando as linhas que os IFs mandam tirar
         // IF só vai existir se teve um EQU antes
 
         tem_label = acha_label(termo1); 
@@ -272,14 +287,15 @@ void Pre_p(char *nome_do_arquivo) {
             y=0;
             while(y < conta_equs){
 
-                //printf("\ncomparei %s e %s\n", termo1, tabela_EQU[y][0]);
 
                 if(strcmp(tabela_EQU[y][0], termo1) == 0){
 
                     printf("\nErro na linha %d: diretiva EQU redefinindo uma label!\nErro semântico.\n", conta_linhas); 
                     exit(0); 
                 }
+
                 y++;
+
             }
 
             strcpy(tabela_EQU[conta_equs][0], termo1);
@@ -300,7 +316,7 @@ void Pre_p(char *nome_do_arquivo) {
             // achou o if
             // procura o simbolo na tabela temporaria pra ver se o proximo simbolo vai ser escrito no arquivo
             // a atual linha não será escrita
-            // se if == 1, linha seguinte é ignorada
+            // se if == 0, linha seguinte é ignorada
 
             pula_linha = 1;
 
@@ -309,30 +325,33 @@ void Pre_p(char *nome_do_arquivo) {
             y=0;
             while(y < conta_equs){
 
-                //printf("\ncomparei %s e %s\n", termo2, tabela_EQU[y][0]);
-
                 if(strcmp(tabela_EQU[y][0], termo2) == 0){
 
                     tabela_EQU[y][3][0] = '1';
-                    //printf("\nachei\n"); 
-                    //printf("\ncomparei %s e 0\n", tabela_EQU[y][2]);
 
                     if_valido = 1;
 
                     if(strcmp(tabela_EQU[y][2], "0") == 0){
-                        //printf("ignora a proxima linha!");
+                        // proxima linha será ignorada
                         pula_prox_linha = 1; 
                     }
                     
                 }
+
                 y++;
             }
+
             if(if_valido == 1){
+
                 if_valido = 0;
+
             }
+
             else{
+
                 printf("\nErro na linha %d: o IF fez comparação com um termo indefinido!\nErro semântico.\n", conta_linhas); 
-                exit(0); 
+                exit(0);
+
             }
 
         }
@@ -348,6 +367,7 @@ void Pre_p(char *nome_do_arquivo) {
             conta_simbolos = 0; 
             passou_do_sectiontext = 1; 
             pula_linha = 0;
+
         }
 
         if((strcmp(termo1, "COPY") == 0) || (strcmp(termo1, "copy") == 0)){
@@ -405,6 +425,11 @@ void Pre_p(char *nome_do_arquivo) {
     }
 
 
+    //------------------------------------------------------------------------------------------
+    // Final do loop de pré-processamento
+
+    // Se libera a alocação dinâmica e se fecha arquivos
+
     free(termo1);
     free(termo2);
     free(termo3);
@@ -434,11 +459,10 @@ void Pre_p(char *nome_do_arquivo) {
 
     file_teste = fopen("teste.txt", "r");
 
-    
-
     while((char_atual = fgetc(file_teste)) != EOF){
-        //printf("%c", char_atual);
+
         fprintf(file_final, "%c", char_atual);
+        
     }
 
 

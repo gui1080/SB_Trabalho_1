@@ -2,7 +2,7 @@
 // Matrícula: 17/0162290
 // Semestre 2020/01, UnB
 // https://github.com/gui1080/SB_Trabalho_1
-
+// Escolha de implementação: detectar erros. 
 
 //------------------------
 // libs
@@ -46,7 +46,9 @@ int main(int argc, char *argv[]) {
 
     // ./main -p seuprograma.asm
 
-    //faz o pre-processamento
+    // faz o arquivo pré-processado em .pre
+
+    // faz o pre-processamento
 
     Pre_p(nome_do_arquivo); 
 
@@ -57,9 +59,9 @@ int main(int argc, char *argv[]) {
 
     // ./main -o seuprograma.pre
 
-    // faz o arquivo objeto
+    // faz o arquivo objeto em .obj
     
-    // o usuário deve antes executar o pre-processamento
+    // o usuário deve antes executar o pre-processamento para possuir um arquivo .pre
 
     Monta_assembly(nome_do_arquivo); 
 
