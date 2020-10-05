@@ -32,17 +32,17 @@ Makefile baseado em: https://www.cs.colby.edu/maxwell/courses/tutorials/maketuto
 
 Link para o Github do trabalho: https://github.com/gui1080/SB_Trabalho_1
 
-# Estrutura dos arquivos
+# Estrutura das Pastas
 
 SB_Trabalho1
 
-├── _include
+>├── _include
 
-├── _src
+>├── _src
 
-    ├── _Casos de Teste
-
-    └── _obj
+>   └── _Casos de Teste
+    
+>   └── _obj
 
 Na pasta include estão os arquivos .h
 
@@ -63,3 +63,53 @@ Então executa-se:
 > ./main -o bin.pre
 
 E assim se chega no código objeto/pré-processado desejado. 
+
+# Arquivo .pre gerado para o bin.asm
+
+A2: equ 0
+
+SECTION TEXT
+
+INPUT OLD_DATA
+
+LOAD OLD_DATA
+
+L1:
+
+DIV DOIS
+
+STORE NEW_DATA
+
+MULT DOIS
+
+STORE TMP_DATA
+
+LOAD OLD_DATA
+
+SUB TMP_DATA
+
+STORE TMP_DATA
+
+output TMP_DATA
+
+COPY NEW_DATA OLD_DATA
+
+LOAD OLD_DATA
+
+JMPP L1
+
+STOP  
+
+SECTION DATA
+
+DOIS: CONST 2
+
+OLD_DATA: SPACE
+
+NEW_DATA: SPACE
+
+TMP_DATA: SPACE
+
+# Arquivo .obj gerado para o bin.pre
+
+12 29 10 29 4 28 11 30 3 28 11 31 10 29 2 31 11 31 13 31 9 30 29 10 29 7 4 14 2 OO OO OO 
