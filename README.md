@@ -36,13 +36,13 @@ Link para o Github do trabalho: https://github.com/gui1080/SB_Trabalho_1
 
 SB_Trabalho1
 
->├── _include
+├── _include
 
->├── _src
+├── _src
 
->   └── _Casos de Teste
+   └── _Casos de Teste
     
->   └── _obj
+   └── _obj
 
 Na pasta include estão os arquivos .h
 
