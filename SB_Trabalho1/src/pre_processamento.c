@@ -127,23 +127,19 @@ void Pre_p(char *nome_do_arquivo) {
         conta_linhas++; 
 
         if(prox_linha == 0){
-            fprintf(file_teste, "\n");
+            fprintf(file_teste, "\n"); // isso previne que no arquivo .pre existam linhas vazias a toa no final
             prox_linha = 1; 
         }
+
         if(pula_prox_linha == 1){
-            pula_linha = 1;
+            pula_linha = 1;            // atualizando flags relacionadas à pular linhas
             pula_prox_linha = 0;
         }
 
         // linha que vai ser dividida em tokens
         resultado_de_leitura = fgets(linha, 100, file); 
 
-        if(strcmp(linha, "\n") == 0){
-
-            // ignora linha vazia
-
-            pula_linha = 1; 
-        }
+        printf("\n%d: %s\n", conta_linhas, linha);
 
         tokens = strtok(linha, divisor);
         i = 1; 
@@ -168,14 +164,25 @@ void Pre_p(char *nome_do_arquivo) {
             tokens = strtok(NULL, divisor); 
         }
 
-
-        // numa linha temos no máximo um rotulo com uma inst de 2 operandos, totalizando 4 termos
-        // assim checo se um termo é comentário e passo a ignora-lo 
-        // se havia um comentário após as 4 tokens, já foi descartado
-
         // i é a quantidade de tokens na linha
 
         i--; 
+
+    
+
+        if( (strcmp(linha, "\n") == 0) ){
+
+            // ignora linha vazia
+
+            pula_linha = 1; 
+            i = 0;
+        }
+
+        // numa linha temos no máximo um rotulo com uma inst de 2 operandos, totalizando 4 termos ("tokens")
+        // assim checo se um termo é comentário e passo a ignora-lo 
+        // se havia um comentário após as 4 tokens, já foi descartado
+
+        
         if(i==1){
 
             //printf("Termos na linha: %s\nQuantidade: %d\n\n", termo1, i);
@@ -296,6 +303,21 @@ void Pre_p(char *nome_do_arquivo) {
 
                 y++;
 
+            }
+
+            y = strlen(termo3);
+
+            j=0;
+
+            while(j<y){
+
+                if(  !((termo3[j] >= '0') && (termo3[j] <= '9'))  ){    // essa comparação checa se todos os caracteres dessa token são dígitos ou não
+
+                    printf("\nErro na linha %d: o EQU deveria receber um número, e não uma letra!\nErro sintaxico.\n", conta_linhas); 
+                    exit(0); 
+                
+                }
+                j++;
             }
 
             strcpy(tabela_EQU[conta_equs][0], termo1);
@@ -420,7 +442,7 @@ void Pre_p(char *nome_do_arquivo) {
         }
         if(pula_linha == 1){
             pula_linha = 0; 
-        }
+        } 
     
     }
 

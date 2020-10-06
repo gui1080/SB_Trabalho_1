@@ -26,7 +26,7 @@ Para então limpar os arquivos compilados, pode ser utilizado o comando "make cl
 
 # Observações
 
-Programa feito no Ubuntu 18.04
+Programa feito em C no Ubuntu 18.04
 
 Makefile baseado em: https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/ 
 
