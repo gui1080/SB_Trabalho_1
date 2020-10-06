@@ -139,8 +139,6 @@ void Pre_p(char *nome_do_arquivo) {
         // linha que vai ser dividida em tokens
         resultado_de_leitura = fgets(linha, 100, file); 
 
-        printf("\n%d: %s\n", conta_linhas, linha);
-
         tokens = strtok(linha, divisor);
         i = 1; 
 
@@ -167,8 +165,6 @@ void Pre_p(char *nome_do_arquivo) {
         // i é a quantidade de tokens na linha
 
         i--; 
-
-    
 
         if( (strcmp(linha, "\n") == 0) ){
 
@@ -443,6 +439,11 @@ void Pre_p(char *nome_do_arquivo) {
         if(pula_linha == 1){
             pula_linha = 0; 
         } 
+
+        *termo1 = '\0';
+        *termo2 = '\0';
+        *termo3 = '\0';
+        *termo4 = '\0'; 
     
     }
 
