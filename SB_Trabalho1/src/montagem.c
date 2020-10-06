@@ -465,6 +465,20 @@ void Monta_assembly(char *nome_do_arquivo){
             }
             if((strcmp(termo2, "CONST") == 0) || (strcmp(termo2, "const") == 0)){
 
+                x=0;
+                while( x<(strlen(termo3)) ){
+
+                    if(  !((termo3[x] >= '0') && (termo3[x] <= '9'))  ){    // essa comparação checa se todos os caracteres dessa token são dígitos ou não
+
+                        printf("\nErro na linha %d: o CONST deveria receber um número, e não uma letra!\nErro sintaxico.\n", k); 
+                        fclose(file_obj); 
+                        remove(nome_do_arquivo_obj);
+                        exit(0); 
+                
+                    }
+                x++;
+            }
+
                 // caso seja um const, se imprime o que havia sido declarado
 
                 fprintf(file_obj, "%s ", termo3);
