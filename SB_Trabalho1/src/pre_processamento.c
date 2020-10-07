@@ -166,12 +166,18 @@ void Pre_p(char *nome_do_arquivo) {
 
         i--; 
 
-        if( (strcmp(linha, "\n") == 0) ){
+        if( (strcmp(linha, "\n") == 0) || (strcmp(linha, "\0") == 0) ){
 
             // ignora linha vazia
 
             pula_linha = 1; 
             i = 0;
+
+            *termo1 = '\0';
+            *termo2 = '\0';
+            *termo3 = '\0';
+            *termo4 = '\0'; 
+
         }
 
         // numa linha temos no máximo um rotulo com uma inst de 2 operandos, totalizando 4 termos ("tokens")

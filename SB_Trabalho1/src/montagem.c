@@ -312,9 +312,11 @@ void Monta_assembly(char *nome_do_arquivo){
 
     fclose(file_pre); 
 
-    printf("\nTabela de Símbolos resultante da Primeira Passagem!\n");
+    // printf("\nTabela de Símbolos resultante da Primeira Passagem!\n");
 
     tabela_de_simbolos = realloc( tabela_de_simbolos, sizeof(char) * simbolos_existentes * 2 * 50); 
+
+    /*
 
     for(x=0; x<simbolos_existentes ; x++){
         for(y=0 ; y<2 ; y++){
@@ -322,6 +324,8 @@ void Monta_assembly(char *nome_do_arquivo){
         }
         printf("\n"); 
     }
+
+    */
 
     //------------------------------------------------------------------------------------------
     // Final da primeira passagem

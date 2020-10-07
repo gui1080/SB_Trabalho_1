@@ -19,6 +19,7 @@
 
 //------------------------
 
+// Obs: como o arquivo dado como exemplo, o montador recebe programas em assembly sem espaços ao final do programa, para que exista um final bem definido. Espaços em branco ao longo do programa são irrelevantes.
 
 int main(int argc, char *argv[]) {
 

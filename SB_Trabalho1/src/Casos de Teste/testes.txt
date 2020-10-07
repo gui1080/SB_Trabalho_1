@@ -2,6 +2,9 @@ Guilherme Braga - 17/0162290
 
 Nesta pasta se encontram alguns testes feitos ao longo do desenvolvimento, sendo todos estes testes variações do programa bin.asm 
 
+> arquivo bin.pre: arquivo gerado pelo pré-processamento de bin.asm
+> arquivo bin.obj: arquivo gerado pela montagem do arquivo bin.pre
+
 > Testes para serem feitos no pré-processamento (./main -p binx.asm)
 
 bin1.asm: neste arquivo um IF se refere a um termo indefinido (ERRO).
