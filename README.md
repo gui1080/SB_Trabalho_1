@@ -14,11 +14,11 @@ Escolha de implementação: detectar erros.
 
 # Instruções de Uso
 
-O arquivo a ser utilizado deve se localizado na pasta src. Os outputs também serão criados nesta pasta.
+Ao seu utilizado o programa, ao longo do desenvolvimento, localizou-se sempre na pasta src todos os arquivos em questão (.asm, .pre e .obj). Os outputs também foram criados nesta pasta junto dos arquivos usados como input. Porém, a necessidade real é a de que o arquivo executável deve estar na mesma pasta do arquivo .pre ou .asm que se deseja processar, para que o output também seja gerado nesta pasta.
 
 Para compilar o programa, rode "make" dentro da pasta source.
 
-Para rodar o programa, rode "./main" seguido de  um espaço com "-o" (para ter como um retorno o arquivo ".obj", tendo como entrada um arquivo ".asm") ou "-p" (para ter como um retorno o arquivo ".pre", tendo como entrada um arquivo ".pre"), e então seguido de um espaço e o nome do seu arquivo. 
+Para rodar o programa, execute "./main" seguido de  um espaço com "-o" (para ter como um retorno o arquivo ".obj", tendo como entrada um arquivo ".asm") ou "-p" (para ter como um retorno o arquivo ".pre", tendo como entrada um arquivo ".pre"), e então seguido de um espaço e o nome do seu arquivo. 
 
 Exemplos: "./main -p bin.asm" e "./main -o bin.pre"
 
@@ -98,7 +98,7 @@ LOAD OLD_DATA
 
 JMPP L1
 
-STOP  
+STOP
 
 SECTION DATA
 
@@ -112,4 +112,4 @@ TMP_DATA: SPACE
 
 # Arquivo .obj gerado para o bin.pre
 
-12 29 10 29 4 28 11 30 3 28 11 31 10 29 2 31 11 31 13 31 9 30 29 10 29 7 4 14 2 OO OO OO 
+12 29 10 29 4 28 11 30 3 28 11 31 10 29 2 31 11 31 13 31 9 30 29 10 29 7 4 14 2 O O O 

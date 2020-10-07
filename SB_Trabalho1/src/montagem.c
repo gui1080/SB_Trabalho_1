@@ -459,7 +459,7 @@ void Monta_assembly(char *nome_do_arquivo){
             
                 // se o segundo termo da linha é SPACE, devemos imprimir "OO"
                 
-                fprintf(file_obj, "OO ");
+                fprintf(file_obj, "O ");
 
 
             }

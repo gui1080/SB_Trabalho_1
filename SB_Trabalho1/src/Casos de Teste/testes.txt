@@ -1,11 +1,11 @@
-Guilherme Braga - 17/0162290
+Guilherme Braga - 17/0162290 
 
-Nesta pasta se encontram alguns testes feitos ao longo do desenvolvimento.
+Nesta pasta se encontram alguns testes feitos ao longo do desenvolvimento, sendo todos estes testes variações do programa bin.asm 
 
 > Testes para serem feitos no pré-processamento (./main -p binx.asm)
 
 bin1.asm: neste arquivo um IF se refere a um termo indefinido (ERRO).
-bin2.asm: neste arquivo ocorre um EQU após o SECTION TEXT (ERRO).
+bin2.asm: neste arquivo ocorre um EQU dentro do SECTION TEXT (ERRO).
 bin3.asm: neste arquivo tentamos redefinir o A2 logo após sua definição (ERRO).
 bin4.asm: neste arquivo o EQU recebe uma letra, não um número (ERRO).
 
