@@ -10,6 +10,8 @@ UnB, 2020/01
 
 Prazo de entrega: 09/10/2020
 
+Data de envio: 09/10/2020
+
 Escolha de implementação: detectar erros. 
 
 # Instruções de Uso
@@ -22,7 +24,7 @@ Para rodar o programa, execute "./main" seguido de  um espaço com "-o" (para te
 
 Exemplos: "./main -p bin.asm" e "./main -o bin.pre"
 
-Para então limpar os arquivos compilados, pode ser utilizado o comando "make clean"
+Para então limpar os arquivos compilados, pode ser utilizado o comando "make clean".
 
 # Observações
 

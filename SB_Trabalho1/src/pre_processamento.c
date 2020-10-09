@@ -373,7 +373,7 @@ void Pre_p(char *nome_do_arquivo) {
 
             else{
 
-                printf("\nErro na linha %d: o IF fez comparação com um termo indefinido!\nErro semântico.\n", conta_linhas); 
+                printf("\nErro na linha %d: o IF fez comparação com um termo indefinido!\nErro léxico.\n", conta_linhas); 
                 exit(0);
 
             }
