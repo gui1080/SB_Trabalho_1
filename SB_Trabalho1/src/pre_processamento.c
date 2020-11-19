@@ -9,6 +9,9 @@
 #include <pre_processamento.h>
 #include <auxiliar.h>
 
+// 
+// REGRA DE USO: Arquivo de input precisa terminar com uma linha vazia (tanto no pré-processamento como na hora de montar)
+
 void Pre_p(char *nome_do_arquivo) {
 
     // vamos satisfazer os ifs e apagar comentarios, exportando tudo num arquivo .pre
@@ -176,7 +179,13 @@ void Pre_p(char *nome_do_arquivo) {
 
         //strcpy(antigo1, termo1);
 
-        if(strcmp(termo1, antigo1) == 0){
+        if(passou_do_sectiondata == 1){
+            if(strcmp(termo1, antigo1) == 0){
+                pula_linha = 1; 
+            }
+        }
+
+        if(i == 0){
             pula_linha = 1; 
         }
 
@@ -321,161 +330,164 @@ void Pre_p(char *nome_do_arquivo) {
             exit(0); 
         }
 
-        if(tem_label == 1 && passou_do_sectiontext == 0){
+        if(pula_linha == 0){
+            if(tem_label == 1 && passou_do_sectiontext == 0){
 
-            // bota os primeiros simbolos q vamos descartar no arquivo pre-processado final numa tabela
-            // não se escreve essa linha no arquivo
+                // bota os primeiros simbolos q vamos descartar no arquivo pre-processado final numa tabela
+                // não se escreve essa linha no arquivo
 
-            // tabela de EQU tem a estrutura termo1/termo2/"vai ser descartado ou não"?
+                // tabela de EQU tem a estrutura termo1/termo2/"vai ser descartado ou não"?
 
-            y=0;
-            while(y < conta_equs){
+                y=0;
+                while(y < conta_equs){
 
 
-                if(strcmp(tabela_EQU[y][0], termo1) == 0){
+                    if(strcmp(tabela_EQU[y][0], termo1) == 0){
 
-                    printf("\nErro na linha %d: diretiva EQU redefinindo uma label!\nErro semântico.\n", conta_linhas); 
-                    exit(0); 
-                }
-
-                y++;
-
-            }
-
-            y = strlen(termo3);
-
-            j=0;
-
-            while(j<y){
-
-                if(  !((termo3[j] >= '0') && (termo3[j] <= '9'))  ){    // essa comparação checa se todos os caracteres dessa token são dígitos ou não
-
-                    printf("\nErro na linha %d: o EQU deveria receber um número, e não uma letra!\nErro sintaxico.\n", conta_linhas); 
-                    exit(0); 
-                
-                }
-                j++;
-            }
-
-            strcpy(tabela_EQU[conta_equs][0], termo1);
-
-            strcpy(tabela_EQU[conta_equs][1], termo2);
-    
-            strcpy(tabela_EQU[conta_equs][2], termo3);
-
-            tabela_EQU[conta_equs][3][0] = '0';
-
-            conta_equs++; 
-            pula_linha = 1; 
-
-        }
-
-        if(tem_label == 2){
-
-            // achou o if
-            // procura o simbolo na tabela temporaria pra ver se o proximo simbolo vai ser escrito no arquivo
-            // a atual linha não será escrita
-            // se if == 0, linha seguinte é ignorada
-
-            pula_linha = 1;
-
-            strncat(termo2, &ch, 1);
-            
-            y=0;
-            while(y < conta_equs){
-
-                if(strcmp(tabela_EQU[y][0], termo2) == 0){
-
-                    tabela_EQU[y][3][0] = '1';
-
-                    if_valido = 1;
-
-                    if(strcmp(tabela_EQU[y][2], "0") == 0){
-                        // proxima linha será ignorada
-                        pula_prox_linha = 1; 
+                        printf("\nErro na linha %d: diretiva EQU redefinindo uma label!\nErro semântico.\n", conta_linhas); 
+                        exit(0); 
                     }
+
+                    y++;
+
+                }
+
+                y = strlen(termo3);
+
+                j=0;
+
+                while(j<y){
+
+                    if(  !((termo3[j] >= '0') && (termo3[j] <= '9'))  ){    // essa comparação checa se todos os caracteres dessa token são dígitos ou não
+
+                        printf("\nErro na linha %d: o EQU deveria receber um número, e não uma letra!\nErro sintaxico.\n", conta_linhas); 
+                        exit(0); 
                     
+                    }
+                    j++;
                 }
 
-                y++;
-            }
+                strcpy(tabela_EQU[conta_equs][0], termo1);
 
-            if(if_valido == 1){
+                strcpy(tabela_EQU[conta_equs][1], termo2);
+        
+                strcpy(tabela_EQU[conta_equs][2], termo3);
 
-                if_valido = 0;
+                tabela_EQU[conta_equs][3][0] = '0';
 
-            }
-
-            else{
-
-                printf("\nErro na linha %d: o IF fez comparação com um termo indefinido!\nErro léxico.\n", conta_linhas); 
-                exit(0);
+                conta_equs++; 
+                pula_linha = 1; 
 
             }
 
-        }
+            if(tem_label == 2){
 
-        tem_label = 0; 
+                // achou o if
+                // procura o simbolo na tabela temporaria pra ver se o proximo simbolo vai ser escrito no arquivo
+                // a atual linha não será escrita
+                // se if == 0, linha seguinte é ignorada
 
+                pula_linha = 1;
 
-        if((strcmp(termo2, "TEXT") == 0) || (strcmp(termo2, "text") == 0)){
-            
-            // detro do section text, todos os rotulos q vieram antes podem ser apagados do contador
-            // pode ser q estes sirvam apenas para os ifs
-            
-            conta_simbolos = 0; 
-            passou_do_sectiontext = 1; 
-            pula_linha = 0;
-
-        }
-
-        if((strcmp(termo2, "DATA") == 0) || (strcmp(termo2, "data") == 0)){
-            
-            // detro do section text, todos os rotulos q vieram antes podem ser apagados do contador
-            // pode ser q estes sirvam apenas para os ifs
-            
-            passou_do_sectiondata = 1; 
-
-        }
-
-        if((strcmp(termo1, "COPY") == 0) || (strcmp(termo1, "copy") == 0)){
-            
-            // tiro a virgula do final do termo 2 para ajudar mais adiante e para checar erro
-            // a estrutura do copy é: COPY X, Y
-            // o segundo termo deve terminar em "," ou está equivocado 
-
-            j=0;
-            y=0;
-
-             
-
-            while(termo2[y] != '\0'){
-
-                if(termo2[y] == ','){
-                    termo2[y] = '\0';
-                    j=1;
-                }
-                y++;
-            }
-            
-            y=0;
-            while(termo3[y] != '\0'){
-
-                if(termo3[y] == ','){
-                    j=0;
-                }
-                y++;
-            }
-
-            if(j==0){
+                strncat(termo2, &ch, 1);
                 
-                printf("\nErro na linha %d: Não é assim que se declara um COPY!\nErro sintático.\n", conta_linhas); 
-                exit(0); 
-            
+                y=0;
+                while(y < conta_equs){
+
+                    if(strcmp(tabela_EQU[y][0], termo2) == 0){
+
+                        tabela_EQU[y][3][0] = '1';
+
+                        if_valido = 1;
+
+                        if(strcmp(tabela_EQU[y][2], "0") == 0){
+                            // proxima linha será ignorada
+                            pula_prox_linha = 1; 
+                        }
+                        
+                    }
+
+                    y++;
+                }
+
+                if(if_valido == 1){
+
+                    if_valido = 0;
+
+                }
+
+                else{
+
+                    printf("\nErro na linha %d: o IF fez comparação com um termo indefinido!\nErro léxico.\n", conta_linhas); 
+                    exit(0);
+
+                }
+
             }
-            
+
+            tem_label = 0; 
+
+
+            if((strcmp(termo2, "TEXT") == 0) || (strcmp(termo2, "text") == 0)){
+                
+                // detro do section text, todos os rotulos q vieram antes podem ser apagados do contador
+                // pode ser q estes sirvam apenas para os ifs
+                
+                conta_simbolos = 0; 
+                passou_do_sectiontext = 1; 
+                pula_linha = 0;
+
+            }
+
+            if((strcmp(termo2, "DATA") == 0) || (strcmp(termo2, "data") == 0)){
+                
+                // detro do section text, todos os rotulos q vieram antes podem ser apagados do contador
+                // pode ser q estes sirvam apenas para os ifs
+                
+                passou_do_sectiondata = 1; 
+
+            }
+
+            if((strcmp(termo1, "COPY") == 0) || (strcmp(termo1, "copy") == 0)){
+                
+                // tiro a virgula do final do termo 2 para ajudar mais adiante e para checar erro
+                // a estrutura do copy é: COPY X, Y
+                // o segundo termo deve terminar em "," ou está equivocado 
+
+                j=0;
+                y=0;
+
+                
+
+                while(termo2[y] != '\0'){
+
+                    if(termo2[y] == ','){
+                        termo2[y] = '\0';
+                        j=1;
+                    }
+                    y++;
+                }
+                
+                y=0;
+                while(termo3[y] != '\0'){
+
+                    if(termo3[y] == ','){
+                        j=0;
+                    }
+                    y++;
+                }
+
+                if(j==0){
+                    
+                    printf("\nErro na linha %d: Não é assim que se declara um COPY!\nErro sintático.\n", conta_linhas); 
+                    exit(0); 
+                
+                }
+                
+            }
+        
         }
-    
+
         if(pula_linha == 0){
 
 

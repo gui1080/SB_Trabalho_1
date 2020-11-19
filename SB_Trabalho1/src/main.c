@@ -18,7 +18,8 @@
 #include <montagem.h>
 
 //------------------------
-
+// 
+// REGRA DE USO: Arquivo de input precisa terminar com uma linha vazia (tanto no pré-processamento como na hora de montar)
 int main(int argc, char *argv[]) {
 
   // argv -p: apenas pre-precessamento

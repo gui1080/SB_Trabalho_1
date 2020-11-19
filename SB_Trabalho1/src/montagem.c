@@ -9,6 +9,8 @@
 #include <montagem.h>
 #include <auxiliar.h>
 
+// 
+// REGRA DE USO: Arquivo de input precisa terminar com uma linha vazia (tanto no pré-processamento como na hora de montar)
 
 void Monta_assembly(char *nome_do_arquivo){
 
@@ -231,7 +233,7 @@ void Monta_assembly(char *nome_do_arquivo){
                 if( strcmp(termo1, tabela_de_simbolos[x][0]) == 0 ){
 
                     printf("\nErro na linha %d: símbolo sendo redefinido!\nErro semântico.\n", k);  
-                    exit(0);   
+                    //exit(0);   
 
                 } 
             }
@@ -245,7 +247,7 @@ void Monta_assembly(char *nome_do_arquivo){
                 if(passou_section_text == 1){
 
                     printf("\nErro na linha %d: diretiva EQU é para ocorrer antes do SECTION TEXT!\nErro semântico.\n", k); 
-                    exit(0); 
+                    //exit(0); 
                     
                 }
 
@@ -262,7 +264,7 @@ void Monta_assembly(char *nome_do_arquivo){
                     if( (strcmp(termo2, "CONST") == 0) || (strcmp(termo2, "SPACE") == 0) || (strcmp(termo2, "const") == 0) || (strcmp(termo2, "space") == 0) ){
 
                         printf("\nErro na linha %d: esta diretiva é para ocorrer depois do SECTION DATA!\nErro semântico.\n", k); 
-                        exit(0); 
+                        //exit(0); 
 
                     }
                 }
@@ -423,9 +425,9 @@ void Monta_assembly(char *nome_do_arquivo){
                 // duas labels na mesma linha!!!
 
                 printf("\nErro na linha %d: duas labels definidas na mesma linha!\nErro sintático.\n", k);
-                fclose(file_obj); 
-                remove(nome_do_arquivo_obj);
-                exit(0);
+                //fclose(file_obj); 
+                //remove(nome_do_arquivo_obj);
+                //exit(0);
 
             }
             if( i == 3 ){
@@ -433,9 +435,9 @@ void Monta_assembly(char *nome_do_arquivo){
                 if( acha_label(termo3) ){
                     // duas labels na mesma linha!!!
                     printf("\nErro na linha %d: duas labels definidas na mesma linha!\nErro sintático.\n", k);
-                    fclose(file_obj); 
-                    remove(nome_do_arquivo_obj);
-                    exit(0);
+                    //fclose(file_obj); 
+                    //remove(nome_do_arquivo_obj);
+                    //exit(0);
 
                 }
 
@@ -445,18 +447,18 @@ void Monta_assembly(char *nome_do_arquivo){
                 if( acha_label(termo3) ){
                     // duas labels na mesma linha!!!
                     printf("\nErro na linha %d: duas labels definidas na mesma linha!\nErro sintático.\n", k);
-                    fclose(file_obj); 
-                    remove(nome_do_arquivo_obj);
-                    exit(0);
+                    //fclose(file_obj); 
+                    //remove(nome_do_arquivo_obj);
+                    //exit(0);
 
                 }
 
                 if( acha_label(termo4) ){
                     // duas labels na mesma linha!!!
                     printf("\nErro na linha %d: duas labels definidas na mesma linha!\nErro sintático.\n", k);
-                    fclose(file_obj); 
-                    remove(nome_do_arquivo_obj);
-                    exit(0);
+                    //fclose(file_obj); 
+                    //remove(nome_do_arquivo_obj);
+                    //exit(0);
 
                 }
 
@@ -479,9 +481,9 @@ void Monta_assembly(char *nome_do_arquivo){
                     if(  !((termo3[x] >= '0') && (termo3[x] <= '9'))  ){    // essa comparação checa se todos os caracteres dessa token são dígitos ou não
 
                         printf("\nErro na linha %d: o CONST deveria receber um número, e não uma letra!\nErro sintaxico.\n", k); 
-                        fclose(file_obj); 
-                        remove(nome_do_arquivo_obj);
-                        exit(0); 
+                        //fclose(file_obj); 
+                        //remove(nome_do_arquivo_obj);
+                        //exit(0); 
                 
                     }
                 x++;
@@ -507,9 +509,9 @@ void Monta_assembly(char *nome_do_arquivo){
                         !(strcmp(termo2, "equ") == 0) && !(strcmp(termo2, "const") == 0) && !(strcmp(termo2, "space") == 0)){
                             
                             printf("\nErro na linha %d: diretiva inválida após criação de label!\nErro sintático.\n", k);
-                            fclose(file_obj); 
-                            remove(nome_do_arquivo_obj);
-                            exit(0); 
+                            //fclose(file_obj); 
+                            //remove(nome_do_arquivo_obj);
+                            //exit(0); 
 
                         }
 
@@ -539,9 +541,9 @@ void Monta_assembly(char *nome_do_arquivo){
                             }
                             else{
                                 printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k);
-                                fclose(file_obj); 
-                                remove(nome_do_arquivo_obj); 
-                                exit(0);
+                                //fclose(file_obj); 
+                                //remove(nome_do_arquivo_obj); 
+                                //exit(0);
                             }
 
                         } 
@@ -562,9 +564,9 @@ void Monta_assembly(char *nome_do_arquivo){
                             }
                             else{
                                 printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
-                                fclose(file_obj); 
-                                remove(nome_do_arquivo_obj);
-                                exit(0);
+                                //fclose(file_obj); 
+                                //remove(nome_do_arquivo_obj);
+                                //exit(0);
                             }
 
                             for(x=0; x<simbolos_existentes ; x++){
@@ -580,9 +582,9 @@ void Monta_assembly(char *nome_do_arquivo){
                             }
                             else{
                                 printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
-                                fclose(file_obj); 
-                                remove(nome_do_arquivo_obj);
-                                exit(0);
+                                //fclose(file_obj); 
+                                //remove(nome_do_arquivo_obj);
+                                //exit(0);
                             } 
 
                         } 
@@ -590,13 +592,37 @@ void Monta_assembly(char *nome_do_arquivo){
                     }
                 }
 
-                /*
-                else{
+                printf("\n\n%s %s %s %s : %d\n\n", termo1, termo2, termo3, termo4, i); 
+
+                if(i == 1){
 
                     // se esta passando por uma label sozinha na linha sem nada a fazer
+                    op = define_op_code(termo1);
+                    
+                    if(op == 0){
+
+                        // não achamos essa operação na tabela
+                        // deve ser um endreço de memória
+                        for(x=0; x<simbolos_existentes ; x++){
+                            if( strcmp(termo1, tabela_de_simbolos[x][0]) == 0 ){
+                                // achamos o símbolo
+                                fprintf(file_obj, "%s ", tabela_de_simbolos[x][1]);  
+                                simbolo_encontrado = 1;
+                            }
+                        }
+
+                        if(simbolo_encontrado == 1){
+                            simbolo_encontrado = 0;
+                        }
+                    }
+                    else{
+                        
+                        // imprime a operação sozinha
+                        fprintf(file_obj, "%d ", op);
+
+                    }
 
                 }
-                */
             
             }
 
@@ -619,7 +645,7 @@ void Monta_assembly(char *nome_do_arquivo){
                     if(op == 0){
 
                         printf("\nErro na linha %d: operação inválida!\nErro léxico.\n", k); 
-                        exit(0);
+                        //exit(0);
                         
                     }
 
@@ -644,7 +670,7 @@ void Monta_assembly(char *nome_do_arquivo){
                         }
                         else{
                             printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
-                            exit(0);
+                            //exit(0);
                         }
                         
                     } 
@@ -667,7 +693,7 @@ void Monta_assembly(char *nome_do_arquivo){
                         }
                         else{
                             printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
-                            exit(0);
+                            //exit(0);
                         }
 
                         for(x=0; x<simbolos_existentes ; x++){
@@ -685,9 +711,9 @@ void Monta_assembly(char *nome_do_arquivo){
                         }
                         else{
                             printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
-                            fclose(file_obj); 
-                            remove(nome_do_arquivo_obj);
-                            exit(0);
+                            //fclose(file_obj); 
+                            //remove(nome_do_arquivo_obj);
+                            //exit(0);
                         }
                         
                     } 
@@ -695,9 +721,9 @@ void Monta_assembly(char *nome_do_arquivo){
                 else{
 
                     printf("\nErro na linha %d: a quantidade de argumentos não está correta para esta operação!\nErro sintático.\n", k); 
-                    fclose(file_obj); 
-                    remove(nome_do_arquivo_obj);
-                    exit(0); 
+                    //fclose(file_obj); 
+                    //remove(nome_do_arquivo_obj);
+                    //exit(0); 
 
                 }
             
@@ -722,9 +748,9 @@ void Monta_assembly(char *nome_do_arquivo){
                     else{
                         // esse section não existe
                         printf("\nErro na linha %d: esse tipo de SECTION não existe!\nErro sintático.\n", k); 
-                        fclose(file_obj); 
-                        remove(nome_do_arquivo_obj);
-                        exit(0);
+                        //fclose(file_obj); 
+                        //remove(nome_do_arquivo_obj);
+                        //exit(0);
 
                     }
 
