@@ -136,8 +136,10 @@ void Monta_assembly(char *nome_do_arquivo){
     j = 0;
     k = 0;
 
+    int loop = 0; 
+
     // loop enquanto o arquivo não termina
-    while(!feof(file_pre)){
+    while(loop < linhas_no_arquivo){
 
         sprintf(end_em_string, "%d", acumulador_do_endereco);
 
@@ -307,6 +309,8 @@ void Monta_assembly(char *nome_do_arquivo){
             }
 
         }
+
+        loop++; 
 
     }
 

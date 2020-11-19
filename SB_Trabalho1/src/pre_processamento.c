@@ -16,6 +16,7 @@ void Pre_p(char *nome_do_arquivo) {
 
     int i, conta_equs, j, y;
     y=0; 
+    int m, n; 
     char *resultado_de_leitura; 
     char *linha; // 200 espaços por linha como margem de segurança pois cada rótulo é variável tem até 50 caracteres cada 
                     // se a linha ocupa muito mais do que isso logo tem um comentário que é imediatamente descartado
@@ -65,6 +66,8 @@ void Pre_p(char *nome_do_arquivo) {
     char *termo3;
     char *termo4; 
 
+    char *antigo1; 
+
     char ch = ':';
 
     int conta_linhas = 0; 
@@ -73,6 +76,7 @@ void Pre_p(char *nome_do_arquivo) {
     termo2 = (char *) malloc(limite_tam_termo * sizeof(char));
     termo3 = (char *) malloc(limite_tam_termo * sizeof(char));
     termo4 = (char *) malloc(limite_tam_termo * sizeof(char));
+    antigo1 = (char *) malloc(limite_tam_termo * sizeof(char));
 
     linha = (char *) malloc((4*limite_tam_termo) * sizeof(char));
  
@@ -117,12 +121,16 @@ void Pre_p(char *nome_do_arquivo) {
     pula_linha = 0;
     pula_prox_linha = 0;
 
+    int passou_do_sectiondata = 0; 
+
     int prox_linha = 1; 
 
     // -----------------------------
     // Loop da leitura de tokens
 
     while(!feof(file)){
+
+        strcpy(antigo1, termo1);
 
         conta_linhas++; 
 
@@ -166,6 +174,12 @@ void Pre_p(char *nome_do_arquivo) {
 
         i--; 
 
+        //strcpy(antigo1, termo1);
+
+        if(strcmp(termo1, antigo1) == 0){
+            pula_linha = 1; 
+        }
+
         if( (strcmp(linha, "\n") == 0) || (strcmp(linha, "\0") == 0) ){
 
             // ignora linha vazia
@@ -183,6 +197,10 @@ void Pre_p(char *nome_do_arquivo) {
         // numa linha temos no máximo um rotulo com uma inst de 2 operandos, totalizando 4 termos ("tokens")
         // assim checo se um termo é comentário e passo a ignora-lo 
         // se havia um comentário após as 4 tokens, já foi descartado
+
+        if(termo1[0] == ';'){
+            pula_linha = 1; 
+        }
 
         
         if(i==1){
@@ -394,6 +412,15 @@ void Pre_p(char *nome_do_arquivo) {
 
         }
 
+        if((strcmp(termo2, "DATA") == 0) || (strcmp(termo2, "data") == 0)){
+            
+            // detro do section text, todos os rotulos q vieram antes podem ser apagados do contador
+            // pode ser q estes sirvam apenas para os ifs
+            
+            passou_do_sectiondata = 1; 
+
+        }
+
         if((strcmp(termo1, "COPY") == 0) || (strcmp(termo1, "copy") == 0)){
             
             // tiro a virgula do final do termo 2 para ajudar mais adiante e para checar erro
@@ -433,6 +460,8 @@ void Pre_p(char *nome_do_arquivo) {
         }
     
         if(pula_linha == 0){
+
+
             switch(i){
                 case 1 : fprintf(file_teste, "%s", termo1); break;
                 case 2 : fprintf(file_teste, "%s %s", termo1, termo2); break;
@@ -441,12 +470,13 @@ void Pre_p(char *nome_do_arquivo) {
                     
             }
             prox_linha = 0;
+
         }
         if(pula_linha == 1){
             pula_linha = 0; 
         } 
 
-        *termo1 = '\0';
+        //*termo1 = '\0';
         *termo2 = '\0';
         *termo3 = '\0';
         *termo4 = '\0'; 
