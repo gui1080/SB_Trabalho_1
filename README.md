@@ -14,6 +14,8 @@ Data de envio: 09/10/2020
 
 Escolha de implementação: detectar erros. 
 
+REGRA DE USO: Arquivo de input precisa terminar com uma linha vazia (tanto no pré-processamento como na hora de montar).
+
 # Instruções de Uso
 
 Ao seu utilizado o programa, ao longo do desenvolvimento, localizou-se sempre na pasta src todos os arquivos em questão (.asm, .pre e .obj). Os outputs também foram criados nesta pasta junto dos arquivos usados como input. Porém, a necessidade real é a de que o arquivo executável deve estar na mesma pasta do arquivo .pre ou .asm que se deseja processar, para que o output também seja gerado nesta pasta.
