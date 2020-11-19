@@ -180,6 +180,12 @@ void Pre_p(char *nome_do_arquivo) {
             pula_linha = 1; 
         }
 
+        if(((termo1[0] == 'I') && (termo1[1] == 'F')) || ((termo1[0] == 'i') && (termo1[1] == 'f'))){
+            if(!(termo1[2] == ':')){
+                printf("ERRO: Era pro IF ter um ':' na sua declaração\n"); 
+            }
+        } 
+
         if( (strcmp(linha, "\n") == 0) || (strcmp(linha, "\0") == 0) ){
 
             // ignora linha vazia
@@ -203,6 +209,17 @@ void Pre_p(char *nome_do_arquivo) {
         }
 
         
+        printf("\n!!%s %s %s %s %d\n", termo1, termo2, termo3, termo4, i); 
+
+        if(i > 4){
+            if(termo4[0] == ';'){
+                i = 3; 
+            }
+            if(termo3[0] == ';'){
+                i = 2; 
+            }
+        }
+
         if(i==1){
 
             //printf("Termos na linha: %s\nQuantidade: %d\n\n", termo1, i);
@@ -503,16 +520,16 @@ void Pre_p(char *nome_do_arquivo) {
     // obtém-se a tabela equ do q foi usado ou nao nos ifs, um arquivo de texto com as linhas limpas
     // junta tudo no arquivo .pre final
 
-    for(i=0 ; i<conta_equs ; i++){
+   // for(i=0 ; i<conta_equs ; i++){
 
-        if(tabela_EQU[i][3][0] == '0'){
+       // if(tabela_EQU[i][3][0] == '0'){
 
-            fprintf(file_final, "%s %s %s\n", tabela_EQU[i][0], tabela_EQU[i][1], tabela_EQU[i][2]);
-            conta_simbolos++; 
+          //  fprintf(file_final, "%s %s %s\n", tabela_EQU[i][0], tabela_EQU[i][1], tabela_EQU[i][2]);
+        //    conta_simbolos++; 
 
-        }
+      //  }
 
-    }
+    //}
 
     fclose(file_teste);
 
