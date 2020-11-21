@@ -68,7 +68,7 @@ void Pre_p(char *nome_do_arquivo) {
     char *termo2; 
     char *termo3;
     char *termo4; 
-
+    char *termoaux; 
     char *antigo1; 
 
     char ch = ':';
@@ -80,6 +80,7 @@ void Pre_p(char *nome_do_arquivo) {
     termo3 = (char *) malloc(limite_tam_termo * sizeof(char));
     termo4 = (char *) malloc(limite_tam_termo * sizeof(char));
     antigo1 = (char *) malloc(limite_tam_termo * sizeof(char));
+    termoaux = (char *) malloc(limite_tam_termo * sizeof(char));
 
     linha = (char *) malloc((4*limite_tam_termo) * sizeof(char));
  
@@ -191,7 +192,7 @@ void Pre_p(char *nome_do_arquivo) {
 
         if(((termo1[0] == 'I') && (termo1[1] == 'F')) || ((termo1[0] == 'i') && (termo1[1] == 'f'))){
             if(!(termo1[2] == ':')){
-                printf("ERRO: Era pro IF ter um ':' na sua declaração\n"); 
+                printf("\nErro na linha %d: Era pro IF ter um ':' na sua declaração\n", conta_linhas); 
             }
         } 
 
@@ -218,7 +219,7 @@ void Pre_p(char *nome_do_arquivo) {
         }
 
         
-        printf("\n!!%s %s %s %s %d\n", termo1, termo2, termo3, termo4, i); 
+        //printf("\n!!%s %s %s %s %d\n", termo1, termo2, termo3, termo4, i); 
 
         if(i > 4){
             if(termo4[0] == ';'){
@@ -425,6 +426,34 @@ void Pre_p(char *nome_do_arquivo) {
 
             }
 
+            if(pula_linha == 0){
+
+                y=0;
+                strcpy(termoaux, termo2); 
+                strncat(termoaux, &ch, 1);
+                while(y < conta_equs){
+                    if(strcmp(tabela_EQU[y][0], termoaux) == 0){ 
+
+                        strcpy(termo2, tabela_EQU[y][2]);        
+                    }
+                    y++;
+                }
+
+                y=0;
+                strcpy(termoaux, termo3); 
+                strncat(termoaux, &ch, 1);
+                while(y < conta_equs){
+                    if(strcmp(tabela_EQU[y][0], termoaux) == 0){ 
+
+                        strcpy(termo3, tabela_EQU[y][2]);        
+                    }
+                    y++;
+                }
+
+            }
+
+            
+
             tem_label = 0; 
 
 
@@ -522,6 +551,8 @@ void Pre_p(char *nome_do_arquivo) {
     free(termo2);
     free(termo3);
     free(termo4); 
+    free(termoaux);
+    free(antigo1); 
 
     free(linha); 
     free(novo_nome_do_arquivo); 

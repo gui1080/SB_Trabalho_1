@@ -139,6 +139,7 @@ void Monta_assembly(char *nome_do_arquivo){
     k = 0;
 
     int loop = 0; 
+    int era_equ = 0;
 
     // loop enquanto o arquivo não termina
     while(loop < linhas_no_arquivo){
@@ -540,10 +541,25 @@ void Monta_assembly(char *nome_do_arquivo){
                                 simbolo_encontrado = 0;
                             }
                             else{
-                                printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k);
-                                //fclose(file_obj); 
-                                //remove(nome_do_arquivo_obj); 
-                                //exit(0);
+
+                                for(x=0; x< strlen(termo3) ; x++ ){
+                                    if(  ((termo3[x] >= '0') && (termo3[x] <= '9'))  ){
+                                        // se esse if foi satisfeito, o termo não teve letra e foi só numeros
+                                        // assumo ser um equ
+                                        era_equ = 1; 
+                                    }
+                                }
+
+                                if(era_equ == 1){
+                                    fprintf(file_obj, "%s ", termo3);
+                                    era_equ = 0; 
+                                    simbolo_encontrado = 0;
+                                }else{
+                                    printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k);
+                                    //exit(0);
+                                    era_equ = 0;
+                                }
+
                             }
 
                         } 
@@ -563,10 +579,26 @@ void Monta_assembly(char *nome_do_arquivo){
                                 simbolo_encontrado = 0;
                             }
                             else{
-                                printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
-                                //fclose(file_obj); 
-                                //remove(nome_do_arquivo_obj);
-                                //exit(0);
+
+                                for(x=0; x< strlen(termo3) ; x++ ){
+                                    if(  ((termo3[x] >= '0') && (termo3[x] <= '9'))  ){
+                                        // se esse if foi satisfeito, o termo não teve letra e foi só numeros
+                                        // assumo ser um equ
+                                        era_equ = 1; 
+                                    }
+                                }
+
+                                if(era_equ == 1){
+                                    fprintf(file_obj, "%s ", termo3);
+                                    era_equ = 0; 
+                                    simbolo_encontrado = 0;
+                                }else{
+                                    printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k);
+                                    //exit(0);
+                                    era_equ = 0;
+                                    simbolo_encontrado = 0;
+                                }
+
                             }
 
                             for(x=0; x<simbolos_existentes ; x++){
@@ -581,10 +613,25 @@ void Monta_assembly(char *nome_do_arquivo){
                                 simbolo_encontrado = 0;
                             }
                             else{
-                                printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
-                                //fclose(file_obj); 
-                                //remove(nome_do_arquivo_obj);
-                                //exit(0);
+
+                                for(x=0; x< strlen(termo4) ; x++ ){
+                                    if(  ((termo4[x] >= '0') && (termo4[x] <= '9'))  ){
+                                        // se esse if foi satisfeito, o termo não teve letra e foi só numeros
+                                        // assumo ser um equ
+                                        era_equ = 1; 
+                                    }
+                                }
+
+                                if(era_equ == 1){
+                                    fprintf(file_obj, "%s ", termo4);
+                                    era_equ = 0; 
+                                    simbolo_encontrado = 0;
+                                }else{
+                                    printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k);
+                                    //exit(0);
+                                    era_equ = 0;
+                                }
+
                             } 
 
                         } 
@@ -592,7 +639,7 @@ void Monta_assembly(char *nome_do_arquivo){
                     }
                 }
 
-                printf("\n\n%s %s %s %s : %d\n\n", termo1, termo2, termo3, termo4, i); 
+                //printf("\n\n%s %s %s %s : %d\n\n", termo1, termo2, termo3, termo4, i); 
 
                 if(i == 1){
 
@@ -616,7 +663,6 @@ void Monta_assembly(char *nome_do_arquivo){
                         }
                     }
                     else{
-                        
                         // imprime a operação sozinha
                         fprintf(file_obj, "%d ", op);
 
@@ -653,7 +699,7 @@ void Monta_assembly(char *nome_do_arquivo){
 
                     if(i == 2){
 
-                        // tem 1 simbolo da TS pra imprimir (operaçao + simbolo)
+                        // tem potencialmente 1 simbolo da TS pra imprimir (operaçao + simbolo)
 
                         for(x=0; x<simbolos_existentes ; x++){
                             if( strcmp(termo2, tabela_de_simbolos[x][0]) == 0 ){
@@ -669,15 +715,32 @@ void Monta_assembly(char *nome_do_arquivo){
                             simbolo_encontrado = 0;
                         }
                         else{
-                            printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
-                            //exit(0);
+
+                            for(x=0; x< strlen(termo2) ; x++ ){
+                                if(  ((termo2[x] >= '0') && (termo2[x] <= '9'))  ){
+                                    // se esse if foi satisfeito, o termo não teve letra e foi só numeros
+                                    // assumo ser um equ
+                                    era_equ = 1; 
+                                }
+                            }
+
+                            if(era_equ == 1){
+                                fprintf(file_obj, "%s ", termo2);
+                                era_equ = 0; 
+                                simbolo_encontrado = 0;
+                            }else{
+                                printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k);
+                                //exit(0);
+                                era_equ = 0;
+                            }
+
                         }
                         
                     } 
 
                     if(i == 3){
                         
-                        // tem 2 simbolos da TS pra imprimir (operaçao + simbolo + simbolo)
+                        // tem potencialmente 2 simbolos da TS pra imprimir (operaçao + simbolo + simbolo)
 
                         for(x=0; x<simbolos_existentes ; x++){
                             if( strcmp(termo2, tabela_de_simbolos[x][0]) == 0 ){
@@ -692,8 +755,25 @@ void Monta_assembly(char *nome_do_arquivo){
                             simbolo_encontrado = 0;
                         }
                         else{
-                            printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
-                            //exit(0);
+
+                            for(x=0; x< strlen(termo2) ; x++ ){
+                                if(  ((termo2[x] >= '0') && (termo2[x] <= '9'))  ){
+                                    // se esse if foi satisfeito, o termo não teve letra e foi só numeros
+                                    // assumo ser um equ
+                                    era_equ = 1; 
+                                }
+                            }
+
+                            if(era_equ == 1){
+                                fprintf(file_obj, "%s ", termo2);
+                                era_equ = 0; 
+                                simbolo_encontrado = 0;
+                            }else{
+                                printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k);
+                                //exit(0);
+                                era_equ = 0;
+                            }
+
                         }
 
                         for(x=0; x<simbolos_existentes ; x++){
@@ -710,10 +790,25 @@ void Monta_assembly(char *nome_do_arquivo){
                             simbolo_encontrado = 0;
                         }
                         else{
-                            printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k); 
-                            //fclose(file_obj); 
-                            //remove(nome_do_arquivo_obj);
-                            //exit(0);
+
+                            for(x=0; x< strlen(termo2) ; x++ ){
+                                if(  ((termo2[x] >= '0') && (termo2[x] <= '9'))  ){
+                                    // se esse if foi satisfeito, o termo não teve letra e foi só numeros
+                                    // assumo ser um equ
+                                    era_equ = 1; 
+                                }
+                            }
+
+                            if(era_equ == 1){
+                                fprintf(file_obj, "%s ", termo2);
+                                era_equ = 0; 
+                                simbolo_encontrado = 0;
+                            }else{
+                                printf("\nErro na linha %d: símbolo não encontrado!\nErro léxico.\n", k);
+                                //exit(0);
+                                era_equ = 0;
+                            }
+
                         }
                         
                     } 
